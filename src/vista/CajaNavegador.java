@@ -1,0 +1,771 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package vista;
+
+import conexion.Conexion;
+import java.awt.Dimension;
+
+import controlador.Ctrl_Productos;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import modelo.Productos;
+import modelo.detalles_venta;
+
+/**
+ *
+ * @author Rama
+ */
+public class CajaNavegador extends javax.swing.JFrame {
+
+    Productos p = new Productos();
+    Ctrl_Productos cp = new Ctrl_Productos();
+    DefaultTableModel Productos = new DefaultTableModel();
+    DefaultTableModel Productos2 = new DefaultTableModel();
+
+    ArrayList<detalles_venta> ListaProductos = new ArrayList<>();
+    private detalles_venta productos;
+
+ 
+    private int factura = 1;
+    private String codigo;
+    private String producto;
+    private double precioUnitario;
+    private int porcentajeIva;
+
+    private int cantidad = 1;
+    private double subtotal = 0.00;
+    private double iva = 0.00;
+    private double totalPagarBS = 0.00;
+    private double totalPagarDS = 0.00;
+    private int aux = 1;
+
+    /**
+     * Creates new form cajaprueba
+     */
+    public static Caja caja;
+
+    public CajaNavegador(Caja caja) {
+        this.caja = caja;
+        initComponents();
+        this.setSize(new Dimension(1280, 720));
+        this.setBackground(new Color(0, 0, 0, 100));
+        BordeSuperior.setBackground(new Color(0, 0, 0, 100));
+        this.setTitle("Caja - Inversiones El Costeño 2023");
+        BordeInferior.setBackground(new Color(0, 0, 0, 100));
+        LateralIzquierdo.setBackground(new Color(0, 0, 0, 100));
+        LateralDerecho.setBackground(new Color(0, 0, 0, 100));
+        Centro.setBackground(new Color(0, 0, 0, 100));
+        this.setLocationRelativeTo(null);
+        this.setExtendedState(this.MAXIMIZED_BOTH);
+        Tabla.getTableHeader().setDefaultRenderer(new HeaderColor());
+        listarClientes();
+        setIconImage(getIconImage());
+    }
+    
+     @Override
+    public Image getIconImage(){
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("img/icon/iconcaja.png"));
+        return retValue;
+    }
+
+    public class HeaderColor extends DefaultTableCellRenderer {
+
+        public HeaderColor() {
+            setOpaque(true);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+            super.getTableCellRendererComponent(table, value, selected, focused, row, column);
+
+            setBackground(new java.awt.Color(255, 255, 255));
+            return this;
+        }
+
+    }
+
+    private void listarClientes() {
+        List<Productos> lista = cp.listar();
+        Productos = (DefaultTableModel) Tabla.getModel();
+        Object[] ob = new Object[8];
+        for (int i = 0; i < lista.size(); i++) {
+            ob[0] = lista.get(i).getIdProducto();
+            ob[1] = lista.get(i).getCodigo();
+            ob[2] = lista.get(i).getProducto();
+            ob[3] = lista.get(i).getCantidad();
+            ob[4] = lista.get(i).getPrecio();
+            ob[5] = lista.get(i).getDescripcion();
+            ob[6] = lista.get(i).getPorcentajeIVA();
+            ob[7] = lista.get(i).getCategoria();
+            Productos.addRow(ob);
+        }
+        Tabla.setModel(Productos);
+    }
+
+    private void listarProductos() {
+        Productos2.setRowCount(0);
+        List<detalles_venta> lista = ListaProductos;
+        Productos2 = (DefaultTableModel) caja.Tabla.getModel();
+        Object[] ob = new Object[8];
+        for (int i = 0; i < lista.size(); i++) {
+            ob[0] = lista.get(i).getCodigo();
+            ob[1] = lista.get(i).getProducto();
+            ob[2] = lista.get(i).getCantidad();
+            ob[3] = lista.get(i).getPrecioUnitario();
+            ob[4] = lista.get(i).getSubtotal();
+            ob[5] = lista.get(i).getIva();
+            ob[6] = lista.get(i).getTotalPagarDS();
+            Productos2.addRow(ob);
+        }
+        caja.Tabla.setModel(Productos2);
+    }
+
+    /**
+     *
+     * /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        CampoInvisible = new javax.swing.JTextField();
+        BordeSuperior = new javax.swing.JPanel();
+        LateralIzquierdo = new javax.swing.JPanel();
+        LateralDerecho = new javax.swing.JPanel();
+        BordeInferior = new javax.swing.JPanel();
+        Centro = new javax.swing.JPanel();
+        Contenedor = new vista.JpanelRound();
+        ContenedorHeader = new vista.JpanelRound();
+        Header1 = new vista.JpanelRound();
+        ExitButton1 = new vista.JpanelRound();
+        jLabel6 = new javax.swing.JLabel();
+        Footer = new vista.JpanelRound();
+        ContenedorDeBoton = new vista.JpanelRound();
+        ButtonAceptar = new vista.JpanelRound();
+        aceptarTxt = new javax.swing.JLabel();
+        ContenedorCentro = new javax.swing.JPanel();
+        ContenedorDelSeccionadoCentroSuperior = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        Navegador = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        BusquedaTxt = new javax.swing.JLabel();
+        ContenedorDelSeccionadoCentroInferior = new javax.swing.JPanel();
+        borde1 = new javax.swing.JPanel();
+        borde2 = new javax.swing.JPanel();
+        borde3 = new javax.swing.JPanel();
+        borde4 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla = new javax.swing.JTable();
+
+        CampoInvisible.setText("jTextField2");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1280, 720));
+
+        BordeSuperior.setBackground(new java.awt.Color(255, 0, 51));
+
+        javax.swing.GroupLayout BordeSuperiorLayout = new javax.swing.GroupLayout(BordeSuperior);
+        BordeSuperior.setLayout(BordeSuperiorLayout);
+        BordeSuperiorLayout.setHorizontalGroup(
+            BordeSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1280, Short.MAX_VALUE)
+        );
+        BordeSuperiorLayout.setVerticalGroup(
+            BordeSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(BordeSuperior, java.awt.BorderLayout.PAGE_START);
+
+        LateralIzquierdo.setBackground(new java.awt.Color(51, 255, 0));
+
+        javax.swing.GroupLayout LateralIzquierdoLayout = new javax.swing.GroupLayout(LateralIzquierdo);
+        LateralIzquierdo.setLayout(LateralIzquierdoLayout);
+        LateralIzquierdoLayout.setHorizontalGroup(
+            LateralIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        LateralIzquierdoLayout.setVerticalGroup(
+            LateralIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(LateralIzquierdo, java.awt.BorderLayout.LINE_START);
+
+        LateralDerecho.setBackground(new java.awt.Color(0, 0, 204));
+
+        javax.swing.GroupLayout LateralDerechoLayout = new javax.swing.GroupLayout(LateralDerecho);
+        LateralDerecho.setLayout(LateralDerechoLayout);
+        LateralDerechoLayout.setHorizontalGroup(
+            LateralDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        LateralDerechoLayout.setVerticalGroup(
+            LateralDerechoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(LateralDerecho, java.awt.BorderLayout.LINE_END);
+
+        BordeInferior.setBackground(new java.awt.Color(255, 0, 255));
+
+        javax.swing.GroupLayout BordeInferiorLayout = new javax.swing.GroupLayout(BordeInferior);
+        BordeInferior.setLayout(BordeInferiorLayout);
+        BordeInferiorLayout.setHorizontalGroup(
+            BordeInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1280, Short.MAX_VALUE)
+        );
+        BordeInferiorLayout.setVerticalGroup(
+            BordeInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(BordeInferior, java.awt.BorderLayout.PAGE_END);
+
+        Centro.setBackground(new java.awt.Color(51, 51, 51));
+        Centro.setLayout(new java.awt.BorderLayout());
+
+        Contenedor.setBackground(new java.awt.Color(255, 255, 255));
+        Contenedor.setRoundBottomLeft(20);
+        Contenedor.setRoundBottomRight(20);
+        Contenedor.setRoundTopLeft(20);
+        Contenedor.setRoundTopRight(20);
+        Contenedor.setLayout(new java.awt.BorderLayout());
+
+        ContenedorHeader.setPreferredSize(new java.awt.Dimension(600, 50));
+        ContenedorHeader.setRoundTopLeft(20);
+        ContenedorHeader.setRoundTopRight(20);
+        ContenedorHeader.setLayout(new java.awt.BorderLayout());
+
+        Header1.setBackground(new java.awt.Color(255, 255, 255));
+        Header1.setMinimumSize(new java.awt.Dimension(430, 40));
+        Header1.setRoundTopLeft(20);
+        Header1.setRoundTopRight(20);
+        Header1.setLayout(new java.awt.BorderLayout());
+
+        ExitButton1.setBackground(new java.awt.Color(255, 255, 255));
+        ExitButton1.setPreferredSize(new java.awt.Dimension(50, 34));
+        ExitButton1.setRoundTopRight(20);
+        ExitButton1.setLayout(new java.awt.BorderLayout());
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cierre.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+        ExitButton1.add(jLabel6, java.awt.BorderLayout.CENTER);
+
+        Header1.add(ExitButton1, java.awt.BorderLayout.LINE_END);
+
+        ContenedorHeader.add(Header1, java.awt.BorderLayout.CENTER);
+
+        Contenedor.add(ContenedorHeader, java.awt.BorderLayout.PAGE_START);
+
+        Footer.setBackground(new java.awt.Color(255, 255, 255));
+        Footer.setPreferredSize(new java.awt.Dimension(1080, 50));
+        Footer.setRoundBottomLeft(20);
+        Footer.setRoundBottomRight(20);
+        Footer.setLayout(new java.awt.BorderLayout());
+
+        ContenedorDeBoton.setBackground(new java.awt.Color(255, 255, 255));
+        ContenedorDeBoton.setPreferredSize(new java.awt.Dimension(150, 50));
+        ContenedorDeBoton.setRoundBottomRight(20);
+        ContenedorDeBoton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ButtonAceptar.setBackground(new java.awt.Color(156, 211, 216));
+        ButtonAceptar.setRoundBottomLeft(10);
+        ButtonAceptar.setRoundBottomRight(10);
+        ButtonAceptar.setRoundTopLeft(10);
+        ButtonAceptar.setRoundTopRight(10);
+        ButtonAceptar.setLayout(new java.awt.BorderLayout());
+
+        aceptarTxt.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        aceptarTxt.setForeground(new java.awt.Color(255, 255, 255));
+        aceptarTxt.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        aceptarTxt.setText("Aceptar");
+        aceptarTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        aceptarTxt.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aceptarTxtMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                aceptarTxtMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                aceptarTxtMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                aceptarTxtMousePressed(evt);
+            }
+        });
+        ButtonAceptar.add(aceptarTxt, java.awt.BorderLayout.CENTER);
+
+        ContenedorDeBoton.add(ButtonAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 140, 40));
+
+        Footer.add(ContenedorDeBoton, java.awt.BorderLayout.LINE_END);
+
+        Contenedor.add(Footer, java.awt.BorderLayout.PAGE_END);
+
+        ContenedorCentro.setLayout(new java.awt.BorderLayout());
+
+        ContenedorDelSeccionadoCentroSuperior.setBackground(new java.awt.Color(255, 255, 255));
+        ContenedorDelSeccionadoCentroSuperior.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(300, 100));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Navegador de productos");
+        jPanel9.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 30));
+
+        jPanel14.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel14.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(6, 150, 166));
+        jLabel2.setText("Selecciona tus productos.");
+        jPanel14.add(jLabel2, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 250, 30));
+
+        ContenedorDelSeccionadoCentroSuperior.add(jPanel1, java.awt.BorderLayout.LINE_START);
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setPreferredSize(new java.awt.Dimension(600, 100));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        Navegador.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        Navegador.setSelectionColor(new java.awt.Color(156, 211, 216));
+        Navegador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                NavegadorKeyTyped(evt);
+            }
+        });
+        jPanel7.add(Navegador, java.awt.BorderLayout.CENTER);
+
+        jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 390, 40));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
+        BusquedaTxt.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        BusquedaTxt.setText("Búsqueda");
+        jPanel8.add(BusquedaTxt, java.awt.BorderLayout.CENTER);
+
+        jPanel6.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 90, 30));
+
+        ContenedorDelSeccionadoCentroSuperior.add(jPanel6, java.awt.BorderLayout.LINE_END);
+
+        ContenedorCentro.add(ContenedorDelSeccionadoCentroSuperior, java.awt.BorderLayout.PAGE_START);
+
+        ContenedorDelSeccionadoCentroInferior.setBackground(new java.awt.Color(255, 255, 255));
+        ContenedorDelSeccionadoCentroInferior.setLayout(new java.awt.BorderLayout());
+
+        borde1.setBackground(new java.awt.Color(255, 255, 255));
+        borde1.setMinimumSize(new java.awt.Dimension(10, 100));
+        borde1.setPreferredSize(new java.awt.Dimension(10, 250));
+
+        javax.swing.GroupLayout borde1Layout = new javax.swing.GroupLayout(borde1);
+        borde1.setLayout(borde1Layout);
+        borde1Layout.setHorizontalGroup(
+            borde1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+        borde1Layout.setVerticalGroup(
+            borde1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        ContenedorDelSeccionadoCentroInferior.add(borde1, java.awt.BorderLayout.LINE_START);
+
+        borde2.setBackground(new java.awt.Color(255, 255, 255));
+        borde2.setPreferredSize(new java.awt.Dimension(1080, 10));
+
+        javax.swing.GroupLayout borde2Layout = new javax.swing.GroupLayout(borde2);
+        borde2.setLayout(borde2Layout);
+        borde2Layout.setHorizontalGroup(
+            borde2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1080, Short.MAX_VALUE)
+        );
+        borde2Layout.setVerticalGroup(
+            borde2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
+        ContenedorDelSeccionadoCentroInferior.add(borde2, java.awt.BorderLayout.PAGE_START);
+
+        borde3.setBackground(new java.awt.Color(255, 255, 255));
+        borde3.setPreferredSize(new java.awt.Dimension(1080, 10));
+
+        javax.swing.GroupLayout borde3Layout = new javax.swing.GroupLayout(borde3);
+        borde3.setLayout(borde3Layout);
+        borde3Layout.setHorizontalGroup(
+            borde3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1080, Short.MAX_VALUE)
+        );
+        borde3Layout.setVerticalGroup(
+            borde3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
+        ContenedorDelSeccionadoCentroInferior.add(borde3, java.awt.BorderLayout.PAGE_END);
+
+        borde4.setBackground(new java.awt.Color(255, 255, 255));
+        borde4.setPreferredSize(new java.awt.Dimension(10, 160));
+
+        javax.swing.GroupLayout borde4Layout = new javax.swing.GroupLayout(borde4);
+        borde4.setLayout(borde4Layout);
+        borde4Layout.setHorizontalGroup(
+            borde4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+        borde4Layout.setVerticalGroup(
+            borde4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        ContenedorDelSeccionadoCentroInferior.add(borde4, java.awt.BorderLayout.LINE_END);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        Tabla = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        Tabla.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tabla.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Codigo", "Producto", "Cantidad", "Precio $", "Descripcion", "IVA", "Categoria"
+            }
+        ));
+        Tabla.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        Tabla.setSelectionBackground(new java.awt.Color(6, 150, 166));
+        Tabla.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        Tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        Tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        Tabla.getTableHeader().setReorderingAllowed(false);
+        Tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TablaMousePressed(evt);
+            }
+        });
+        Tabla.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TablaKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla);
+        if (Tabla.getColumnModel().getColumnCount() > 0) {
+            Tabla.getColumnModel().getColumn(0).setPreferredWidth(10);
+            Tabla.getColumnModel().getColumn(2).setPreferredWidth(100);
+            Tabla.getColumnModel().getColumn(3).setPreferredWidth(40);
+            Tabla.getColumnModel().getColumn(4).setPreferredWidth(40);
+            Tabla.getColumnModel().getColumn(5).setPreferredWidth(150);
+            Tabla.getColumnModel().getColumn(6).setPreferredWidth(10);
+        }
+
+        jPanel10.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel3.add(jPanel10, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(jPanel3, java.awt.BorderLayout.CENTER);
+
+        ContenedorDelSeccionadoCentroInferior.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        ContenedorCentro.add(ContenedorDelSeccionadoCentroInferior, java.awt.BorderLayout.CENTER);
+
+        Contenedor.add(ContenedorCentro, java.awt.BorderLayout.CENTER);
+
+        Centro.add(Contenedor, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(Centro, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        this.dispose();
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void NavegadorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NavegadorKeyTyped
+        filtrar();
+    }//GEN-LAST:event_NavegadorKeyTyped
+
+    private void aceptarTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aceptarTxtMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_aceptarTxtMouseClicked
+
+    private void aceptarTxtMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aceptarTxtMouseEntered
+        ButtonAceptar.setBackground(new Color(3, 150, 166));
+    }//GEN-LAST:event_aceptarTxtMouseEntered
+
+    private void aceptarTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aceptarTxtMouseExited
+        ButtonAceptar.setBackground(new Color(156, 211, 216));
+    }//GEN-LAST:event_aceptarTxtMouseExited
+
+    private void TablaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaMousePressed
+        int fila = Tabla.getSelectedRow();
+        CampoInvisible.setText(Tabla.getValueAt(fila, 1).toString());
+    }//GEN-LAST:event_TablaMousePressed
+
+    private void TablaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+           int fila = Tabla.getSelectedRow();
+           cantidad = Integer.parseInt(Tabla.getValueAt(fila, 3).toString()); 
+           if(cantidad>0){
+            cantidad = 1;
+            CampoInvisible.setText(Tabla.getValueAt(fila, 1).toString());
+            this.obtenerProducto(CampoInvisible.getText());
+            //redondear decimales
+            subtotal = (double) Math.round(subtotal * 100) / 100;
+            iva = (double) Math.round(iva * 100) / 100;
+            totalPagarDS = (double) Math.round(totalPagarDS * 100) / 100;
+            productos = new detalles_venta(aux,
+                    1,
+                    factura,
+                    codigo,
+                    producto,
+                    cantidad,
+                    precioUnitario,
+                    subtotal,
+                    iva,
+                    totalPagarBS,
+                    totalPagarDS
+                    
+            );
+            ListaProductos.add(productos);
+            aux++;
+            listarProductos();
+            JOptionPane.showMessageDialog(null, "Producto Agregado");
+            this.dispose();
+            caja.Tabla.changeSelection(caja.Tabla.getRowCount() - 1, 2, false, false);
+            caja.Tabla.editCellAt(caja.Tabla.getRowCount() - 1, 2);
+            caja.Tabla.requestFocus();
+
+            Component editor = caja.Tabla.getEditorComponent();
+            if (editor != null) {
+                editor.requestFocus();
+            }
+        }else{
+               JOptionPane.showMessageDialog(null, "No hay stock de este producto");
+           }
+           
+        }
+    }//GEN-LAST:event_TablaKeyPressed
+
+    private void aceptarTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aceptarTxtMousePressed
+        int fila = Tabla.getSelectedRow();
+           cantidad = Integer.parseInt(Tabla.getValueAt(fila, 3).toString()); 
+           if(cantidad>0){
+            cantidad = 1;
+            CampoInvisible.setText(Tabla.getValueAt(fila, 1).toString());
+            this.obtenerProducto(CampoInvisible.getText());
+            //redondear decimales
+            subtotal = (double) Math.round(subtotal * 100) / 100;
+            iva = (double) Math.round(iva * 100) / 100;
+            totalPagarDS = (double) Math.round(totalPagarDS * 100) / 100;
+            productos = new detalles_venta(aux,
+                    1,
+                    factura,
+                    codigo,
+                    producto,
+                    cantidad,
+                    precioUnitario,
+                    subtotal,
+                    iva,
+                    totalPagarBS,
+                    totalPagarDS
+                    
+            );
+            ListaProductos.add(productos);
+            aux++;
+            listarProductos();
+            JOptionPane.showMessageDialog(null, "Producto Agregado");
+            this.dispose();
+            caja.Tabla.changeSelection(caja.Tabla.getRowCount() - 1, 2, false, false);
+            caja.Tabla.editCellAt(caja.Tabla.getRowCount() - 1, 2);
+            caja.Tabla.requestFocus();
+
+            Component editor = caja.Tabla.getEditorComponent();
+            if (editor != null) {
+                editor.requestFocus();
+            }
+        }else{
+               JOptionPane.showMessageDialog(null, "No hay stock de este producto");
+           }
+    }//GEN-LAST:event_aceptarTxtMousePressed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CajaNavegador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CajaNavegador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CajaNavegador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CajaNavegador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CajaNavegador(caja).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BordeInferior;
+    private javax.swing.JPanel BordeSuperior;
+    private javax.swing.JLabel BusquedaTxt;
+    private vista.JpanelRound ButtonAceptar;
+    private javax.swing.JTextField CampoInvisible;
+    private javax.swing.JPanel Centro;
+    private vista.JpanelRound Contenedor;
+    private javax.swing.JPanel ContenedorCentro;
+    private vista.JpanelRound ContenedorDeBoton;
+    private javax.swing.JPanel ContenedorDelSeccionadoCentroInferior;
+    private javax.swing.JPanel ContenedorDelSeccionadoCentroSuperior;
+    private vista.JpanelRound ContenedorHeader;
+    private vista.JpanelRound ExitButton1;
+    private vista.JpanelRound Footer;
+    private vista.JpanelRound Header1;
+    private javax.swing.JPanel LateralDerecho;
+    private javax.swing.JPanel LateralIzquierdo;
+    private javax.swing.JTextField Navegador;
+    private javax.swing.JTable Tabla;
+    private javax.swing.JLabel aceptarTxt;
+    private javax.swing.JPanel borde1;
+    private javax.swing.JPanel borde2;
+    private javax.swing.JPanel borde3;
+    private javax.swing.JPanel borde4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
+
+    void filtrar() {
+        TableRowSorter sorter = new TableRowSorter(Productos);
+        Tabla.setRowSorter(sorter);
+
+        List<RowSorter.SortKey> sortKey = new ArrayList<>();
+        sortKey.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
+        sorter.setSortKeys(sortKey);
+
+        try {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Navegador.getText()));
+        } catch (Exception e) {
+        }
+    }
+
+    Connection con;
+    PreparedStatement ps;
+    ResultSet rs;
+
+    public void obtenerProducto(String codigo1) {
+        String SQL = "select * from productos where codigo='" + codigo1 + "'";
+
+        try {
+            con = Conexion.conectar();
+            ps = con.prepareStatement(SQL);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                codigo = rs.getString("codigo");
+                producto = rs.getString("producto");
+                precioUnitario = rs.getDouble("precio");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
